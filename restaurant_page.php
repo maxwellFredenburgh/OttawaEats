@@ -23,6 +23,18 @@
 
   </head>
 
+  <?php
+    session_start();
+      $name=$_SESSION['name'];
+      $conn_string="host=www.eecs.uottawa.ca port=15432 dbname=mfred075 user=mfred075 password=M067857565f";
+      $dbconn=pg_connect($conn_string) or die("Connection failed");
+      $query="SELECT * FROM restaurant_db.restaurant WHERE name= $1";
+      $stmt=pg_prepare($dbconn, "ps", $query);
+      $result=pg_execute($dbconn,"ps", array($name));
+
+      pg_close($dbconn);
+   ?>
+
   <body>
 
     <!-- Navigation -->
@@ -34,36 +46,17 @@
     </nav>
 
 
-    <!-- Icons Grid -->
-    <section class="features-icons bg-light text-center">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-              <div class="features-icons-icon d-flex">
-                <i class="icon-screen-desktop m-auto text-primary"></i>
-              </div>
-              <h3>Fully Responsive</h3>
-              <p class="lead mb-0">This theme will look great on any device, no matter the size!</p>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-              <div class="features-icons-icon d-flex">
-                <i class="icon-layers m-auto text-primary"></i>
-              </div>
-              <h3>Bootstrap 4 Ready</h3>
-              <p class="lead mb-0">Featuring the latest build of the new Bootstrap 4 framework!</p>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-              <div class="features-icons-icon d-flex">
-                <i class="icon-check m-auto text-primary"></i>
-              </div>
-              <h3>Easy to Use</h3>
-              <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
-            </div>
+    <!-- Image Showcases -->
+    <section class="showcase">
+      <div class="container-fluid p-0">
+        <div class="row no-gutters">
+
+          <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('img/bg-showcase-1.jpg');"></div>
+          <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+            <?php
+      				$row=pg_fetch_array($result);?>
+            <h2><?php echo $row[1]; ?></h2>
+            <p href="'<?php echo $row[3]; ?>'" class="lead mb-0"><?php echo $row[3]; ?></p>
           </div>
         </div>
       </div>
