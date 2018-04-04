@@ -24,23 +24,24 @@
   </head>
   <?php
     session_start();
-    $name=$_POST['name'];
-    $conn_string="host=www.eecs.uottawa.ca port=15432 dbname=mfred075 user=mfred075 password=M067857565f";
-    $dbconn=pg_connect($conn_string) or die("Connection failed");
-    $query="SELECT * FROM restaurant_db.restaurant WHERE name= $1";
-    $stmt=pg_prepare($dbconn, "ps", $query);
-    $result=pg_execute($dbconn,"ps", array($name));
+    if(array_key_exists('search', $_POST)){
+      $name=$_POST['name'];
+      $conn_string="host=www.eecs.uottawa.ca port=15432 dbname=mfred075 user=mfred075 password=M067857565f";
+      $dbconn=pg_connect($conn_string) or die("Connection failed");
+      $query="SELECT * FROM restaurant_db.restaurant WHERE name= $1";
+      $stmt=pg_prepare($dbconn, "ps", $query);
+      $result=pg_execute($dbconn,"ps", array($name));
 
-    $row_count=pg_num_rows($result);
-    if($row_count>0){
-      //Keep user information across pages and redirect to recores page
-      $_SESSION['name']=$name;
-      header("location: http://localhost/Restaurant/restaurant_page.php");
-      exit;
-    }
+      $row_count=pg_num_rows($result);
+      if($row_count>0){
+        //Keep user information across pages and redirect to recores page
+        $_SESSION['name']=$name;
+        header("location: http://localhost/Restaurant/restaurant_page.php");
+        exit;
+      }
 
-    pg_close($dbconn);
-
+      pg_close($dbconn);
+}
    ?>
 
   <body style="background:url('../img/food.jpg')">
@@ -62,13 +63,13 @@
             <h1 class="mb-5">Search for a Restaurant in the Ottawa Area!</h1>
           </div>
           <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-            <form>
+            <form method = "POST">
               <div class="form-row">
                 <div class="col-12 col-md-9 mb-2 mb-md-0">
                   <input type="text" class="form-control form-control-lg" placeholder="Name of Restaurant..." name="name">
                 </div>
                 <div class="col-12 col-md-3">
-                  <button type="submit" class="btn btn-block btn-lg btn-primary">Search!</button>
+                  <button type="submit" class="btn btn-block btn-lg btn-primary" name = "search">Search!</button>
                 </div>
               </div>
             </form>
