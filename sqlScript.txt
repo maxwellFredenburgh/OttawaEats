@@ -1,0 +1,55 @@
+Create SCHEMA restaurant_db AUTHORIZATION mfred075;
+
+set search_path="restaurant_db";
+
+CREATE TABLE Rater(
+	user_id VARCHAR(20) PRIMARY KEY,
+	email VARCHAR(50),
+	name VARCHAR(20),
+	join_date DATE,
+	type VARCHAR(20),
+	reputation INTEGER DEFAULT 1
+);
+
+CREATE TABLE Restaurant(
+	restaurant_id INTEGER PRIMARY KEY,
+	name VARCHAR(20),
+	type VARCHAR(20),
+	url VARCHAR(150)
+);
+
+CREATE TABLE Rating(
+	user_id VARCHAR(20),
+    FOREIGN KEY(user_id) REFERENCES Rater(user_id),
+    date DATE,
+    price INTEGER,
+    food INTEGER,
+    mood INTEGER,
+    staff INTEGER,
+    comments VARCHAR(150),
+    restaurant_id INTEGER,
+    FOREIGN KEY(restaurant_id) REFERENCES Restaurant(restaurant_id)
+);
+
+CREATE TABLE Location(
+	location_id INTEGER PRIMARY KEY,
+    first_open DATE,
+    manager VARCHAR(20),
+    phone VARCHAR(12),
+    address VARCHAR(50),
+    hour_open VARCHAR(6),
+    hour_close VARCHAR(6),
+    restaurant_id INTEGER,
+    FOREIGN KEY(restaurant_id) REFERENCES Restaurant(restaurant_id)
+);
+
+CREATE TABLE Menu_Item(
+	item_id INTEGER PRIMARY KEY,
+    name VARCHAR(20),
+    type VARCHAR(20),
+    category VARCHAR(20),
+    description VARCHAR(60),
+    price FLOAT,
+    restaurant_id INTEGER,
+    FOREIGN KEY(restaurant_id) REFERENCES Restaurant(restaurant_id)
+);
